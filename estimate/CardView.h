@@ -11,10 +11,10 @@
 
 @interface CardView : UIView {
   UIImage   *image_;
-  NSInteger estimationValue_;
+  float estimationValue_;
 }
 
-@property int estimationValue;
+@property float estimationValue;
 @property (nonatomic,retain) UIImage *image;
 
 - (id)initWithImage:(UIImage*)image;

@@ -14,7 +14,8 @@
 - (int)  determineCurrentCard;
 - (void) cardImageTapped;
 - (void) setupEstimationDeckImages;
--(void) showConfirmationWithMessage:(NSString*)confirmationMessage;
+- (void) showConfirmationWithMessage:(NSString*)confirmationMessage;
+- (NSString*)createConfirmationMessage;
 
 @property (nonatomic,retain) CardView* leftCardView;
 @property (nonatomic,retain) CardView* currentCardView;
@@ -46,7 +47,21 @@
 {
   if(!estimationCardValues_) 
   {
-    estimationCardValues_ = [NSArray arrayWithObjects:0,0.5,1,2,3,5,8,13,20,40,100,0,0,nil];
+    estimationCardValues_ = [[NSArray arrayWithObjects:
+                             [NSNumber numberWithFloat:0.],
+                             [NSNumber numberWithFloat:0.5],
+                             [NSNumber numberWithFloat:1.],
+                             [NSNumber numberWithFloat:2.],
+                             [NSNumber numberWithFloat:3.],
+                             [NSNumber numberWithFloat:5.],
+                             [NSNumber numberWithFloat:8.],
+                             [NSNumber numberWithFloat:13.],
+                             [NSNumber numberWithFloat:20.],
+                             [NSNumber numberWithFloat:40.],
+                             [NSNumber numberWithFloat:100.],
+                             [NSNumber numberWithFloat:0.],
+                             [NSNumber numberWithFloat:0.],
+                             nil] retain];
   }
 }
 
@@ -80,6 +95,7 @@
 {
   [pageControl_ release];
   [estimationCardImages_ release];
+  [estimationCardValues_ release];
   [estimationDeck_ release];
   [tapRecognizer_ release];  
   [leftCardView_ release];
@@ -97,9 +113,11 @@
 - (CardView*)newNextPageNumbered:(int)page
 {
   UIImage *nextCardImage = [estimationCardImages_ objectAtIndex:page];
-  
   CardView *nextCard = [[CardView alloc] initWithImage:nextCardImage];
-  [nextCard setEstimationValue:[[estimationCardValues_ objectAtIndex:page]intValue]];
+
+  float nextEstimationValue = [[estimationCardValues_ objectAtIndex:page] floatValue];
+  [nextCard setEstimationValue:nextEstimationValue];
+  
   [self imageFrameSize:nextCard withIndex:page];
   [estimationDeck_ addSubview:nextCard];
   return nextCard;
@@ -182,6 +200,7 @@
 - (void)loadView
 { 
   [self setupEstimationDeckImages];
+  [self setupEstimationDeckValues];
   
   [[self navigationController] setWantsFullScreenLayout:YES];
   
@@ -265,12 +284,33 @@
   [super viewWillAppear:animated];
 }
 
+
+#pragma  mark -
+#pragma mark Setting an estimate
+
 -(void) cardImageTapped
 {
-  int currentlySelectedEstimate = 3;
-  NSString *confirmationOfEstimateMsg = [NSString stringWithFormat:@"Set selected estimate of %d for this task?", currentlySelectedEstimate];
-  [self showConfirmationWithMessage:confirmationOfEstimateMsg];
+    [self showConfirmationWithMessage:[self createConfirmationMessage]];
+}
+
+-(NSString*)createConfirmationMessage 
+{
+  NSNumber *currentlySelectedEstimate = [estimationCardValues_ objectAtIndex:[self determineCurrentCard]];
+  
+  if([currentlySelectedEstimate integerValue] == 0 && [self determineCurrentCard] > 0) 
+  {
+      return @"Play discussion card, instead of providing standard estimate?";
   }
+  if([currentlySelectedEstimate floatValue] == 0.5) 
+  {
+    unichar c = 0xBD;
+    return [NSString stringWithFormat:@"Set selected estimate of %C for this task?", c];
+  }
+  else 
+  {
+    return [NSString stringWithFormat:@"Set selected estimate of %d for this task?", [currentlySelectedEstimate integerValue]];
+  }
+}
 
 #pragma mark -
 #pragma mark UIAlertViewDelegate
