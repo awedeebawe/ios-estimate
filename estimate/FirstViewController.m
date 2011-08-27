@@ -13,11 +13,12 @@
 - (void) scrollToCard:(int)cardIndex;
 - (int)  determineCurrentCard;
 - (void) cardImageTapped;
-- (void)setupEstimationDeckImages;
+- (void) setupEstimationDeckImages;
+-(void) showConfirmationWithMessage:(NSString*)confirmationMessage;
 
-@property (nonatomic,retain) UIView* leftCardView;
-@property (nonatomic,retain) UIView* currentCardView;
-@property (nonatomic,retain) UIView* rightCardView;
+@property (nonatomic,retain) CardView* leftCardView;
+@property (nonatomic,retain) CardView* currentCardView;
+@property (nonatomic,retain) CardView* rightCardView;
 @end
 
 @implementation FirstViewController
@@ -41,6 +42,13 @@
   }
 }
 
+-(void)setupEstimationDeckValues 
+{
+  if(!estimationCardValues_) 
+  {
+    estimationCardValues_ = [NSArray arrayWithObjects:0,0.5,1,2,3,5,8,13,20,40,100,0,0,nil];
+  }
+}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -79,23 +87,25 @@
   [rightCardView_ release];
 }
 
-- (void)imageFrameSize:(UIView*)view withIndex:(int)index
+- (void)imageFrameSize:(CardView*)view withIndex:(int)index
 {
   CGRect viewFrame = view.frame;
   viewFrame.origin.x = index * kCardDisplayWidth;
   view.frame = viewFrame;
 }
 
-- (UIView*)newNextPageNumbered:(int)page
+- (CardView*)newNextPageNumbered:(int)page
 {
   UIImage *nextCardImage = [estimationCardImages_ objectAtIndex:page];
-  UIImageView *nextCard = [[[UIImageView alloc] initWithImage:nextCardImage] autorelease];
+  
+  CardView *nextCard = [[CardView alloc] initWithImage:nextCardImage];
+  [nextCard setEstimationValue:[[estimationCardValues_ objectAtIndex:page]intValue]];
   [self imageFrameSize:nextCard withIndex:page];
   [estimationDeck_ addSubview:nextCard];
   return nextCard;
 }
 
-- (void)navRightWithNewImage:(UIView*)newView
+- (void)navRightWithNewImage:(CardView*)newView
 {
   [[self leftCardView] removeFromSuperview];
   [self setLeftCardView:[self currentCardView]];
@@ -104,7 +114,7 @@
 }
 
 // as above but to the left, rotating right
-- (void)navLeftWithNewImage:(UIView*)newView
+- (void)navLeftWithNewImage:(CardView*)newView
 {
   [[self rightCardView] removeFromSuperview];
   [self setRightCardView:[self currentCardView]];
@@ -118,7 +128,7 @@
   
   if(card > previousCard_)
   {
-    UIView* newRightView = nil;
+    CardView* newRightView = nil;
     if((card + 1) < [pageControl_ numberOfPages])
     {
       newRightView = [self newNextPageNumbered:card + 1];
@@ -129,7 +139,7 @@
   else if(card < previousCard_)
   {
     // moving to the left
-    UIView* newLeftView = nil;
+    CardView* newLeftView = nil;
     if((card - 1) >= 0)
     {
       newLeftView = [self newNextPageNumbered:card - 1];
@@ -177,7 +187,7 @@
   
   // scrollView displays one image at a time, so should have dimensions of the image being displayed
   float xOffset = (320. - kCardDisplayWidth) / 2.;
-  float yOffset = (480. - kCardDisplayHeight) / 2.;
+  float yOffset = (480. - kTabBarHeight - kCardDisplayHeight) / 2.;
   CGRect cardImageDimensions = CGRectMake(xOffset, yOffset, kCardDisplayWidth, kCardDisplayHeight);
   estimationDeck_ = [[UIScrollView alloc] initWithFrame:cardImageDimensions];
   [estimationDeck_ setBackgroundColor:[UIColor clearColor]];
@@ -189,7 +199,7 @@
   
   pageControl_ = [[UIPageControl alloc] init];
   
-  [pageControl_ setFrame:CGRectMake(0, 390.f, kCardDisplayWidth, 16.f)];
+  [pageControl_ setFrame:CGRectMake(0, 480. - 3*kTabBarHeight, kCardDisplayWidth, 16.f)];
   [pageControl_ setNumberOfPages:[estimationCardImages_ count]];
   [pageControl_ addTarget:self action:@selector(positionChange) forControlEvents:UIControlEventValueChanged];
   
@@ -251,13 +261,31 @@
 - (void)viewWillAppear:(BOOL)animated
 {
   [estimationDeck_ addGestureRecognizer:tapRecognizer_];
-  // TODO : Consider having a default scroll location set here
+  [self scrollToCard:0];
   [super viewWillAppear:animated];
 }
 
 -(void) cardImageTapped
 {
-  NSLog(@"card image was tapped");
+  int currentlySelectedEstimate = 3;
+  NSString *confirmationOfEstimateMsg = [NSString stringWithFormat:@"Set selected estimate of %d for this task?", currentlySelectedEstimate];
+  [self showConfirmationWithMessage:confirmationOfEstimateMsg];
+  }
+
+#pragma mark -
+#pragma mark UIAlertViewDelegate
+
+-(void) showConfirmationWithMessage:(NSString*)confirmationMessage 
+{
+  UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Estimate Selected"  
+                                                    message:confirmationMessage 
+                                                   delegate:nil  
+                                          cancelButtonTitle:@"Cancel"  
+                                          otherButtonTitles:@"Set", nil];  
+  
+  [message show];  
+  
+  [message release];    
 }
 
 @end

@@ -8,15 +8,20 @@
 
 #import "CardView.h"
 
-
 @implementation CardView
 
-- (id)initWithFrame:(CGRect)frame
+@synthesize estimationValue = estimationValue_;
+@synthesize image = image_;
+
+- (id)initWithImage:(UIImage*)image
 {
-    self = [super initWithFrame:frame];
+    self = [super init];
     if (self) 
     {
-        // TODO : Initialization code
+      [self setImage:image];
+      UIImageView *imageView = [[UIImageView alloc] initWithImage:image_];
+      [self addSubview:imageView];
+      [imageView release];
     }
     return self;
 }
@@ -24,11 +29,6 @@
 -(void) setImage:(UIImage*)image
 {
   image_ = [image retain];
-}
-
--(void)setEstimationValue:(NSInteger)estimationValue 
-{
-  estimationValue_ = estimationValue;
 }
 
 - (void)dealloc

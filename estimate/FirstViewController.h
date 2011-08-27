@@ -11,15 +11,18 @@
 
 #define kCardDisplayWidth 91.
 #define kCardDisplayHeight 127.
-#define kTotalCardsInEstimationDeck 5
-#define kTabBarHeight 20.
+#define kTotalCardsInEstimationDeck 13
+#define kTabBarHeight 40.
 
 @interface FirstViewController : UIViewController<UIScrollViewDelegate,UIGestureRecognizerDelegate>
 {
   UIPageControl *pageControl_;
   UITapGestureRecognizer *tapRecognizer_;
   UIScrollView *estimationDeck_;
+  
   NSMutableArray *estimationCardImages_;
+  NSArray *estimationCardValues_;
+  
   CardView *leftCardView_;
   CardView *currentCardView_;
   CardView *rightCardView_;

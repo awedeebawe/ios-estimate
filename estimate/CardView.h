@@ -14,4 +14,9 @@
   NSInteger estimationValue_;
 }
 
+@property int estimationValue;
+@property (nonatomic,retain) UIImage *image;
+
+- (id)initWithImage:(UIImage*)image;
+
 @end
