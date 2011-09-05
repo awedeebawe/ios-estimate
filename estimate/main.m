@@ -3,7 +3,7 @@
 //  estimate
 //
 //  Created by Gemma Barlow on 8/26/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 gem* Productions Pty Ltd. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

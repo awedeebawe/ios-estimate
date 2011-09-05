@@ -14,7 +14,7 @@
 		B2F4CCE214083862006EE6F2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F4CCE114083862006EE6F2 /* main.m */; };
 		B2F4CCE514083862006EE6F2 /* estimateAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F4CCE414083862006EE6F2 /* estimateAppDelegate.m */; };
 		B2F4CCE814083862006EE6F2 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2F4CCE614083862006EE6F2 /* MainWindow.xib */; };
-		B2F4CCEB14083862006EE6F2 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F4CCEA14083862006EE6F2 /* FirstViewController.m */; };
+		B2F4CCEB14083862006EE6F2 /* SelectEstimateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F4CCEA14083862006EE6F2 /* SelectEstimateViewController.m */; };
 		B2F4CCEE14083862006EE6F2 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F4CCED14083862006EE6F2 /* SecondViewController.m */; };
 		B2F4CCF114083862006EE6F2 /* FirstView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2F4CCEF14083862006EE6F2 /* FirstView.xib */; };
 		B2F4CCF414083862006EE6F2 /* SecondView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2F4CCF214083862006EE6F2 /* SecondView.xib */; };
@@ -50,8 +50,8 @@
 		B2F4CCE314083862006EE6F2 /* estimateAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = estimateAppDelegate.h; sourceTree = "<group>"; };
 		B2F4CCE414083862006EE6F2 /* estimateAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = estimateAppDelegate.m; sourceTree = "<group>"; };
 		B2F4CCE714083862006EE6F2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		B2F4CCE914083862006EE6F2 /* FirstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
-		B2F4CCEA14083862006EE6F2 /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
+		B2F4CCE914083862006EE6F2 /* SelectEstimateViewController.h */ = {isa = PBXFileReference; path = SelectEstimateViewController.h; sourceTree = "<group>"; };
+		B2F4CCEA14083862006EE6F2 /* SelectEstimateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelectEstimateViewController.m; sourceTree = "<group>"; };
 		B2F4CCEC14083862006EE6F2 /* SecondViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
 		B2F4CCED14083862006EE6F2 /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
 		B2F4CCF014083862006EE6F2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FirstView.xib; sourceTree = "<group>"; };
@@ -178,8 +178,8 @@
 		B2F4CD1714083ADA006EE6F2 /* controllers */ = {
 			isa = PBXGroup;
 			children = (
-				B2F4CCE914083862006EE6F2 /* FirstViewController.h */,
-				B2F4CCEA14083862006EE6F2 /* FirstViewController.m */,
+				B2F4CCE914083862006EE6F2 /* SelectEstimateViewController.h */,
+				B2F4CCEA14083862006EE6F2 /* SelectEstimateViewController.m */,
 				B2F4CCEC14083862006EE6F2 /* SecondViewController.h */,
 				B2F4CCED14083862006EE6F2 /* SecondViewController.m */,
 			);
@@ -304,7 +304,7 @@
 			files = (
 				B2F4CCE214083862006EE6F2 /* main.m in Sources */,
 				B2F4CCE514083862006EE6F2 /* estimateAppDelegate.m in Sources */,
-				B2F4CCEB14083862006EE6F2 /* FirstViewController.m in Sources */,
+				B2F4CCEB14083862006EE6F2 /* SelectEstimateViewController.m in Sources */,
 				B2F4CCEE14083862006EE6F2 /* SecondViewController.m in Sources */,
 				B2F4CD1B14084280006EE6F2 /* CardView.m in Sources */,
 			);

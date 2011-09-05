@@ -6,9 +6,9 @@
 //  Copyright 2011 gem* Productions. All rights reserved.
 //
 
-#import "FirstViewController.h"
+#import "SelectEstimateViewController.h"
 
-@interface FirstViewController () 
+@interface SelectEstimateViewController () 
 - (void) releaseViews;
 - (void) scrollToCard:(int)cardIndex;
 - (int)  determineCurrentCard;
@@ -17,12 +17,16 @@
 - (void) showConfirmationWithMessage:(NSString*)confirmationMessage;
 - (NSString*)createConfirmationMessage;
 
+- (void) setEstimate;
+- (void) revealHiddenEstimate;
+- (void) toggleCardSelectionView:(BOOL)show withAnimation:(BOOL)animated;
+
 @property (nonatomic,retain) CardView* leftCardView;
 @property (nonatomic,retain) CardView* currentCardView;
 @property (nonatomic,retain) CardView* rightCardView;
 @end
 
-@implementation FirstViewController
+@implementation SelectEstimateViewController
 
 
 @synthesize leftCardView;
@@ -65,11 +69,31 @@
   }
 }
 
+
+#pragma mark -
+#pragma mark Reveal Estimate Button
+-(void)setupRevealEstimateButton 
+{
+    if(!revealEstimateButton_) 
+    {
+        float xOffset = (320. - kEstimationButtonWidth) / 2.;
+        revealEstimateButton_ = [[UIButton alloc] initWithFrame:CGRectMake(xOffset, 200., kEstimationButtonWidth, kEstimationButtonHeight)];
+        [revealEstimateButton_ setTitle:@"Tap to Reveal Estimate" forState:UIControlStateNormal];
+        [revealEstimateButton_ addTarget:self action:@selector(revealHiddenEstimate) forControlEvents:UIControlEventTouchUpInside];
+        [[self view] addSubview:revealEstimateButton_];
+        [revealEstimateButton_ setHidden:YES];
+    }
+}
+
+-(void)revealHiddenEstimate 
+{
+    [self toggleCardSelectionView:YES withAnimation:YES];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
   return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
-
 
 - (void)didReceiveMemoryWarning
 {
@@ -87,7 +111,6 @@
 - (void)dealloc
 {
   [self releaseViews];
-  [estimationDeck_ release];
   [super dealloc];
 }
 
@@ -97,6 +120,7 @@
   [estimationCardImages_ release];
   [estimationCardValues_ release];
   [estimationDeck_ release];
+  [revealEstimateButton_ release];
   [tapRecognizer_ release];  
   [leftCardView_ release];
   [currentCardView_ release];
@@ -201,7 +225,7 @@
 { 
   [self setupEstimationDeckImages];
   [self setupEstimationDeckValues];
-  
+   
   [[self navigationController] setWantsFullScreenLayout:YES];
   
   // scrollView displays one image at a time, so should have dimensions of the image being displayed
@@ -235,6 +259,8 @@
   tapRecognizer_ = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cardImageTapped)];
   [tapRecognizer_ setDelegate:self];
   [tapRecognizer_ setNumberOfTapsRequired:1];
+
+  [self setupRevealEstimateButton];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -279,6 +305,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+  [[self view] setContentMode:UIViewContentModeCenter];
   [estimationDeck_ addGestureRecognizer:tapRecognizer_];
   [self scrollToCard:0];
   [super viewWillAppear:animated];
@@ -319,13 +346,34 @@
 {
   UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Estimate Selected"  
                                                     message:confirmationMessage 
-                                                   delegate:nil  
+                                                   delegate:self  
                                           cancelButtonTitle:@"Cancel"  
                                           otherButtonTitles:@"Set", nil];  
   
   [message show];  
   
   [message release];    
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex 
+{
+    if(buttonIndex != alertView.cancelButtonIndex) 
+    {
+        [self setEstimate];
+    }
+}
+
+-(void) setEstimate 
+{
+    [self toggleCardSelectionView:NO withAnimation:YES];
+}
+
+-(void) toggleCardSelectionView:(BOOL)show withAnimation:(BOOL)animated
+{
+    [estimationDeck_ setHidden:!show];
+    [pageControl_ setHidden:!show];
+    
+    [revealEstimateButton_ setHidden:show];
 }
 
 @end
