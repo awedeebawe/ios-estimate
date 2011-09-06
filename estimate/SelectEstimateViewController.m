@@ -17,7 +17,6 @@
 - (void) showConfirmationWithMessage:(NSString*)confirmationMessage;
 - (NSString*)createConfirmationMessage;
 
-- (void) setEstimate;
 - (void) revealHiddenEstimate;
 - (void) toggleCardSelectionView:(BOOL)show withAnimation:(BOOL)animated;
 
@@ -81,7 +80,7 @@
         [revealEstimateButton_ setTitle:@"Tap to Reveal Estimate" forState:UIControlStateNormal];
         [revealEstimateButton_ addTarget:self action:@selector(revealHiddenEstimate) forControlEvents:UIControlEventTouchUpInside];
         [[self view] addSubview:revealEstimateButton_];
-        [revealEstimateButton_ setHidden:YES];
+        [revealEstimateButton_ setAlpha:0.0f];
     }
 }
 
@@ -359,21 +358,19 @@
 {
     if(buttonIndex != alertView.cancelButtonIndex) 
     {
-        [self setEstimate];
+        [self toggleCardSelectionView:NO withAnimation:YES];
     }
 }
 
--(void) setEstimate 
+-(void) toggleCardSelectionView:(BOOL)showSelectionElements withAnimation:(BOOL)animated
 {
-    [self toggleCardSelectionView:NO withAnimation:YES];
-}
-
--(void) toggleCardSelectionView:(BOOL)show withAnimation:(BOOL)animated
-{
-    [estimationDeck_ setHidden:!show];
-    [pageControl_ setHidden:!show];
-    
-    [revealEstimateButton_ setHidden:show];
+    [UIView animateWithDuration:2.0
+                     animations:^ {
+                         [estimationDeck_ setAlpha:[[NSNumber numberWithBool:showSelectionElements]floatValue]];
+                         [pageControl_ setAlpha:[[NSNumber numberWithBool:showSelectionElements]floatValue]];
+                         [revealEstimateButton_ setAlpha:[[NSNumber numberWithBool:!showSelectionElements]floatValue]];
+               }
+     ];
 }
 
 @end
